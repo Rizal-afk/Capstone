@@ -1,0 +1,27 @@
+#suggestion-text {
+    position: absolute;
+    left: 0.1cm;
+    top: 0;
+    display: flex;
+    align-items: center;
+    color: #9f9999;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 7px 45px 0px 9px;
+    pointer-events: none;
+  }
+
+  .form-control{
+    font-family: 'Quicksand', sans-serif;
+    letter-spacing: 2px;
+  }
+
+  #input-container {
+    position: relative;
+  background-color: #ffffff;
+  width: 400 cm;
+  height: 86 cm;
+  border-radius: 5px;
+  }
+  
