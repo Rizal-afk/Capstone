@@ -4,31 +4,38 @@ const inputReview = document.getElementById('input-review')
 const suggestion = document.getElementById('suggestion-text')
 
 const TAB_KEYCODE = 9
+const BACKSPACE_KEYCODE = 8
+const UP_ARROW_KEYCODE = 38
+const DOWN_ARROW_KEYCODE = 40
+let currentWordIndex = 0
 
 let suggestedWord = ''
 let insertText = false
+let wordPredict = ''
+let suggestedArray = []
 
-async function fetchData (input) {
+// mengirim data ke model
+async function fetchData (wordPredict) {
   try {
-    const data = { predict: input }
+    const data = { predict: wordPredict }
     const response = await axios
-      .post('https://type-suggestion.herokuapp.com/predict', data, {
+      .post('https://essential-oven-344608.as.r.appspot.com/predict', data, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json;charset=UTF-8'
         }
       })
-    let exam = await response.data.prediction
-    console.log(exam)
-    exam = exam.slice(input.length + 1)
-    return exam
+    let predict = await response.data.prediction
+    predict = JSON.parse(predict)
+    return predict
   } catch (error) {
     console.error(error)
   }
 }
 
-async function renderData (inputValue) {
-  suggestedWord = await fetchData(inputValue)
+// mengambil data hasil proses model
+async function renderData (wordPredict) {
+  suggestedWord = await fetchData(wordPredict)
   console.log(suggestedWord)
   return suggestedWord
 }
@@ -42,9 +49,25 @@ inputReview.addEventListener('input', async (e) => {
   }
 
   const inputValue = e.target.value
-  if (suggestedWord != undefined) {
-    suggestion.innerHTML = inputValue + await renderData(inputValue)
-    console.log(suggestion.innerHTML)
+  // mencari pada index berapa .. berada
+  wordPredict = inputValue.indexOf('..')
+  wordPredict = inputValue.slice(wordPredict)
+  // menghilangkan ..
+  wordPredict = wordPredict.substring(2)
+  // mengecek suggest terdapat . atau tidak
+  if (wordPredict.indexOf('.') !== -1) {
+    // mencari di index berapa . berada
+    const akhirkalimat = word.indexOf('.')
+    // mengambil 1 kalimat (sampai index . berada)
+    wordPredict = wordPredict.slice(0, akhirkalimat)
+  }
+  // split string menjadi array substring
+  const jumlah = wordPredict.split(' ')
+  // mengecek suggestedWord not equal undefined dan kata dari array jumlah lebih dari 1
+  if (suggestedWord != undefined && jumlah.length > 1) {
+    suggestedArray = await (renderData(wordPredict))
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[0]
+    console.log(suggestedArray[0])
   }
 
   if (inputValue.length == 0) {
@@ -57,10 +80,27 @@ inputReview.addEventListener('input', async (e) => {
 })
 
 inputReview.addEventListener('keydown', e => {
+  if (e.keyCode == UP_ARROW_KEYCODE) {
+    if (currentWordIndex == 0) return
+    currentWordIndex--
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
+  }
+
+  if (e.keyCode == DOWN_ARROW_KEYCODE && suggestedWord != undefined && suggestedWord != '') {
+    if (currentWordIndex == suggestedWord.length - 1) return
+    currentWordIndex++
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
+  }
+
+  if (e.keyCode == BACKSPACE_KEYCODE) {
+    currentWordIndex = 0
+  }
+
   if (suggestedWord != undefined && suggestedWord != '') {
     if (e.keyCode == TAB_KEYCODE) {
       e.preventDefault()
-      inputReview.value = e.target.value + suggestedWord
+      inputReview.value = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
+      console.log(suggestedArray[currentWordIndex])
       suggestion.innerHTML = ''
     }
   }

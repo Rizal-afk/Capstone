@@ -20,6 +20,7 @@
     "nodemon": "^2.0.16"
   },
   "dependencies": {
+    "@hapi/basic": "^6.0.0",
     "@hapi/hapi": "^20.2.2",
     "@hapi/inert": "^6.0.5",
     "@hapi/vision": "^6.1.0",
