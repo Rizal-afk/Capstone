@@ -66,8 +66,7 @@ inputReview.addEventListener('input', async (e) => {
   // mengecek suggestedWord not equal undefined dan kata dari array jumlah lebih dari 1
   if (suggestedWord != undefined && jumlah.length > 1) {
     suggestedArray = await (renderData(wordPredict))
-    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[0]
-    console.log(suggestedArray[0])
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..') + 2) + suggestedArray[0]
   }
 
   if (inputValue.length == 0) {
@@ -83,13 +82,13 @@ inputReview.addEventListener('keydown', e => {
   if (e.keyCode == UP_ARROW_KEYCODE) {
     if (currentWordIndex == 0) return
     currentWordIndex--
-    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..') + 2) + suggestedArray[currentWordIndex]
   }
 
   if (e.keyCode == DOWN_ARROW_KEYCODE && suggestedWord != undefined && suggestedWord != '') {
     if (currentWordIndex == suggestedWord.length - 1) return
     currentWordIndex++
-    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
+    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..') + 2) + suggestedArray[currentWordIndex]
   }
 
   if (e.keyCode == BACKSPACE_KEYCODE) {
@@ -102,6 +101,7 @@ inputReview.addEventListener('keydown', e => {
       inputReview.value = e.target.value.substring(0, e.target.value.indexOf('..')) + suggestedArray[currentWordIndex]
       console.log(suggestedArray[currentWordIndex])
       suggestion.innerHTML = ''
+      suggestedWord = ''
     }
   }
 })
