@@ -66,7 +66,7 @@ inputReview.addEventListener('input', async (e) => {
   // mengecek suggestedWord not equal undefined dan kata dari array jumlah lebih dari 1
   if (suggestedWord != undefined && jumlah.length > 1) {
     suggestedArray = await (renderData(wordPredict))
-    suggestion.innerHTML = e.target.value.substring(0, e.target.value.indexOf('..') + 2) + suggestedArray[0]
+    suggestion.innerHTML = '<hidden>' + e.target.value.substring(0, e.target.value.indexOf('..') + 2) + '</hidden>' + suggestedArray[0]
   }
 
   if (inputValue.length == 0) {
@@ -104,4 +104,9 @@ inputReview.addEventListener('keydown', e => {
       suggestedWord = ''
     }
   }
+})
+
+document.getElementById('copyToClipboard  ').addEventListener('click', function () {
+  inputReview.select()
+  document.execCommand('copy')
 })

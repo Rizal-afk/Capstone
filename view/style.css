@@ -4,7 +4,7 @@
     top: 0;
     display: flex;
     align-items: center;
-    color: #9f9999;
+    color: #17161699;
     font-family: 'Quicksand', sans-serif;
     font-size: 16px;
     letter-spacing: 2px;
@@ -19,5 +19,12 @@
 
   #input-container {
     position: relative;
+  }
+
+  .clipboard.icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
   }
   
